@@ -21,9 +21,13 @@ repositories {
 extra["springCloudVersion"] = "2023.0.1"
 
 dependencies {
-	//Kotlin
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+	//model mapper
+	implementation("org.modelmapper:modelmapper:3.2.0")
+
+	//postgres and data jpa
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	runtimeOnly("org.postgresql:postgresql")
 
 	//Validation
 	implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -37,6 +41,10 @@ dependencies {
 
 	//Devtools
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+	//Kotlin
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
 }
 
 dependencyManagement {
