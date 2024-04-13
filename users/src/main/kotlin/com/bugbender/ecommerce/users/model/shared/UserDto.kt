@@ -7,6 +7,6 @@ data class UserDto(
     var lastName: String = "",
     var email: String = "",
     var password: String = "",
-    val userId: String = UUID.randomUUID().toString(),
+    var userId: String = UUID.randomUUID().toString(),
     var encryptedPassword: String = ""
 )
