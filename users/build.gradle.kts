@@ -22,12 +22,13 @@ extra["springCloudVersion"] = "2023.0.1"
 
 dependencies {
 
-	//model mapper
-	implementation("org.modelmapper:modelmapper:3.2.0")
+	//Security
+	implementation("org.springframework.boot:spring-boot-starter-security")
 
-	//postgres and data jpa
+	//postgres and data jpa and model mapper
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	runtimeOnly("org.postgresql:postgresql")
+	implementation("org.modelmapper:modelmapper:3.2.0")
 
 	//Validation
 	implementation("org.springframework.boot:spring-boot-starter-validation")

@@ -15,7 +15,10 @@ import java.net.URI
 
 @RestController
 @RequestMapping("/api/users")
-class UserController(private val service: UserService, private val environment: Environment) {
+class UserController(
+    private val service: UserService,
+    private val environment: Environment
+) {
 
     private val mapper = ModelMapper()
 
@@ -26,6 +29,7 @@ class UserController(private val service: UserService, private val environment: 
     @PostMapping
     fun createUser(@Valid @RequestBody userDetails: CreateUserRequestModel): ResponseEntity<CreatedUserResponseModel> {
         val userDto = mapper.map(userDetails, UserDto::class.java)
+
         val createdUserDto = service.createUser(userDto)
         val responseModel = mapper.map(createdUserDto, CreatedUserResponseModel::class.java)
         return ResponseEntity.status(HttpStatus.CREATED).body(responseModel)
