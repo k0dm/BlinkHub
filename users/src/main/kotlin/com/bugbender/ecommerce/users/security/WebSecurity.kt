@@ -1,11 +1,9 @@
 package com.bugbender.ecommerce.users.security
 
 import com.bugbender.ecommerce.users.service.UserService
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment
-import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -13,7 +11,6 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
 @Configuration
 @EnableWebSecurity
@@ -43,7 +40,7 @@ class WebSecurity(
             auth
                 // .requestMatchers(HttpMethod.POST, "api/users", "api/users/login").permitAll()
                 .requestMatchers("/api/users/**")
-                .access(WebExpressionAuthorizationManager(("hasIpAddress('" + environment.getProperty("gateway.ip")) + "')"))
+                .access(WebExpressionAuthorizationManager("hasIpAddress('${environment.getProperty("gateway.ip")}')"))
         }
             .addFilter(authenticationFilter)
             .authenticationManager(authenticationManager)
