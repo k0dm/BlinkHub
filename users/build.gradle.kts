@@ -22,6 +22,10 @@ extra["springCloudVersion"] = "2023.0.1"
 
 dependencies {
 
+	//Config and bootstrap
+	implementation("org.springframework.cloud:spring-cloud-starter-config")
+	implementation("org.springframework.cloud:spring-cloud-starter-bootstrap")
+
 	//Security
 	implementation("org.springframework.boot:spring-boot-starter-security")
 
