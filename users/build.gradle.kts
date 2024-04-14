@@ -22,6 +22,9 @@ extra["springCloudVersion"] = "2023.0.1"
 
 dependencies {
 
+	//Actuator
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+
 	//Cloud bus
 	implementation("org.springframework.cloud:spring-cloud-starter-bus-amqp")
 
