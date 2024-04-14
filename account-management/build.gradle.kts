@@ -21,6 +21,10 @@ repositories {
 extra["springCloudVersion"] = "2023.0.1"
 
 dependencies {
+
+	//Cloud bus
+	implementation("org.springframework.cloud:spring-cloud-starter-bus-amqp")
+
 	//Kotlin
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")

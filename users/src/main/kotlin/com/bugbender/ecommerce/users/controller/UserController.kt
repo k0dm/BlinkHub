@@ -11,7 +11,6 @@ import org.springframework.core.env.Environment
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.net.URI
 
 @RestController
 @RequestMapping("/api/users")
@@ -36,5 +35,6 @@ class UserController(
     }
 
     @GetMapping("/status")
-    fun status() = "users-service working on ${environment.getProperty("local.server.port")}"
+    fun status() =
+        "users-service working on ${environment.getProperty("local.server.port")} token-exp=${environment.getProperty("token.expiration_time")}"
 }
