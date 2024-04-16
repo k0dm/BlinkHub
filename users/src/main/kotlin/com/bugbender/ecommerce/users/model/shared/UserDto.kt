@@ -1,6 +1,7 @@
 package com.bugbender.ecommerce.users.model.shared
 
-import java.util.UUID
+import com.bugbender.ecommerce.users.model.response.ProductResponseModel
+import java.util.*
 
 data class UserDto(
     var firstName: String = "",
@@ -8,5 +9,6 @@ data class UserDto(
     var email: String = "",
     var password: String = "",
     var userId: String = UUID.randomUUID().toString(),
-    var encryptedPassword: String = ""
+    var encryptedPassword: String = "",
+    var products: List<ProductResponseModel> = listOf()
 )

@@ -22,6 +22,9 @@ extra["springCloudVersion"] = "2023.0.1"
 
 dependencies {
 
+	//OpenFeign
+	implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+
 	//Actuator
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 

@@ -2,6 +2,7 @@ package com.bugbender.ecommerce.users.controller
 
 import com.bugbender.ecommerce.users.model.request.CreateUserRequestModel
 import com.bugbender.ecommerce.users.model.response.CreatedUserResponseModel
+import com.bugbender.ecommerce.users.model.response.UserResponseModel
 import com.bugbender.ecommerce.users.model.shared.UserDto
 import com.bugbender.ecommerce.users.service.UserService
 import jakarta.validation.Valid
@@ -31,6 +32,13 @@ class UserController(
 
         val createdUserDto = service.createUser(userDto)
         val responseModel = mapper.map(createdUserDto, CreatedUserResponseModel::class.java)
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseModel)
+    }
+
+    @GetMapping("/{userId}")
+    fun getUser(@PathVariable("userId") userId: String): ResponseEntity<UserResponseModel> {
+        val userDto = service.getUserByUserId(userId)
+        val responseModel = mapper.map(userDto, UserResponseModel::class.java)
         return ResponseEntity.status(HttpStatus.CREATED).body(responseModel)
     }
 
