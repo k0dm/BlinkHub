@@ -1,7 +1,6 @@
 package com.bugbender.ecommerce.users.security
 
 import com.bugbender.ecommerce.users.service.UserService
-import io.netty.handler.codec.http.HttpMethod
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment
@@ -12,7 +11,6 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
 @Configuration
 @EnableWebSecurity
@@ -38,11 +36,16 @@ class WebSecurity(
             csrfCustomizer.disable()
         }
 
+        val webExpressionAuthorizationManager = WebExpressionAuthorizationManager(
+            "hasIpAddress('${environment.getProperty("gateway.ip")}')"
+        )
+
         http.authorizeHttpRequests { auth ->
             auth
-                .requestMatchers(AntPathRequestMatcher("/actuator/**", HttpMethod.GET.name())).permitAll()
-                .requestMatchers("/api/users/**")
-                .access(WebExpressionAuthorizationManager("hasIpAddress('${environment.getProperty("gateway.ip")}')"))
+//                .requestMatchers(AntPathRequestMatcher("/actuator/**", HttpMethod.GET.name()))
+//                .access(webExpressionAuthorizationManager)
+                .requestMatchers("/api/users/**", "/actuator/**")
+                .access(webExpressionAuthorizationManager)
         }
             .addFilter(authenticationFilter)
             .authenticationManager(authenticationManager)

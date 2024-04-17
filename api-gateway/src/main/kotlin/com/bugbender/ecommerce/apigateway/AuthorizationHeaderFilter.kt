@@ -1,6 +1,7 @@
 package com.bugbender.ecommerce.apigateway
 
 import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.springframework.cloud.gateway.filter.GatewayFilter
@@ -11,7 +12,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
-import java.util.*
 
 @Component
 class AuthorizationHeaderFilter(
@@ -31,8 +31,17 @@ class AuthorizationHeaderFilter(
 
         val jwt = headers[HttpHeaders.AUTHORIZATION]!!.first().substringAfter("Bearer ")
 
-        if (!isJwtValid(jwt)) {
-            return@GatewayFilter onError(exchange, "JWT token is not valid", HttpStatus.UNAUTHORIZED)
+        try {
+            if (!isJwtValid(jwt)) return@GatewayFilter onError(
+                exchange,
+                "JWT token is not valid",
+                HttpStatus.UNAUTHORIZED
+            )
+
+        } catch (e: Exception) {
+            val message = if (e is ExpiredJwtException) "JWT token has expired" else "Failed to parse JWT token"
+
+            return@GatewayFilter onError(exchange, message, HttpStatus.UNAUTHORIZED)
         }
 
         chain.filter(exchange)
@@ -40,8 +49,9 @@ class AuthorizationHeaderFilter(
 
     private fun onError(exchange: ServerWebExchange, message: String, httpStatus: HttpStatus): Mono<Void> {
         val response = exchange.response
-        response.setStatusCode(httpStatus)
-        return response.setComplete()
+        response.statusCode = httpStatus
+        val buffer = exchange.response.bufferFactory().wrap(message.toByteArray())
+        return response.writeWith(Mono.just(buffer))
     }
 
     private fun isJwtValid(jwt: String): Boolean {
@@ -49,9 +59,6 @@ class AuthorizationHeaderFilter(
     }
 
     private fun extractSubject(token: String): String? = getAllClaims(token).subject
-
-    private fun isExpired(token: String): Boolean =
-        getAllClaims(token).expiration.before(Date(System.currentTimeMillis()))
 
     private fun getAllClaims(token: String): Claims {
         return Jwts.parser()

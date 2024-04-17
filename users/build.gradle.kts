@@ -22,6 +22,13 @@ extra["springCloudVersion"] = "2023.0.1"
 
 dependencies {
 
+	//Resilience4j
+	implementation("org.springframework.boot:spring-boot-starter-aop")
+	implementation("io.github.resilience4j:resilience4j-reactor")
+	implementation("io.github.resilience4j:resilience4j-spring-boot3")
+//	implementation("io.github.resilience4j:resilience4j-all") // Optional, only required when you want to use the Decorators class
+//	implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j")
+
 	//OpenFeign
 	implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 

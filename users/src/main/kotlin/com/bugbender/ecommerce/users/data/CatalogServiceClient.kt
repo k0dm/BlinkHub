@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable
 @FeignClient("catalog-service")
 interface CatalogServiceClient {
 
-    @GetMapping("/users/{id}/productss")
+    @GetMapping("/users/{id}/products")
     fun getProducts(@PathVariable("id") userId: String): List<ProductResponseModel>
 }
