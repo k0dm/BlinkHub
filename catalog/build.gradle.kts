@@ -22,6 +22,12 @@ extra["springCloudVersion"] = "2023.0.1"
 
 dependencies {
 
+	//distribute tracing with Micrometer and Zipkin
+	implementation("io.micrometer:micrometer-observation:1.12.5")
+	implementation("io.micrometer:micrometer-tracing-bridge-brave")
+	implementation("io.zipkin.reporter2:zipkin-reporter-brave")
+	testImplementation("io.github.openfeign:feign-micrometer:13.2.1")
+
 	//postgres and data jpa and model mapper
 //	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 //	runtimeOnly("org.postgresql:postgresql")

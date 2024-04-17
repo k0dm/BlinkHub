@@ -58,14 +58,9 @@ interface UserService : UserDetailsService {
             val userEntity =
                 repository.findByUserId(userId) ?: throw UsernameNotFoundException("No user with such id: $userId")
 
-
+            logger.debug("Before calling getProducts")
             val productListResponse = catalogServiceClient.getProducts(userId)
-//            val productListResponse = try {
-//                catalogServiceClient.getProducts(userId)
-//            } catch (e: Exception) {
-//                logger.error(e.message)
-//                emptyList()
-//            }
+            logger.debug("After calling getProducts")
 
             val userDto = modelMapper.map(userEntity, UserDto::class.java)
             userDto.products = productListResponse
@@ -73,6 +68,7 @@ interface UserService : UserDetailsService {
         }
 
         override fun getUserByUserIdFallback(userId: String, e: Exception): UserDto {
+            logger.error(e.message)
             val userEntity =
                 repository.findByUserId(userId) ?: throw UsernameNotFoundException("No user with such id: $userId")
 
