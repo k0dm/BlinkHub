@@ -21,9 +21,22 @@ repositories {
 extra["springCloudVersion"] = "2023.0.1"
 
 dependencies {
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+	//Cloud bus
+	implementation("org.springframework.cloud:spring-cloud-starter-bus-amqp")
+
+	//Config and bootstrap
+	implementation("org.springframework.cloud:spring-cloud-starter-config")
+	implementation("org.springframework.cloud:spring-cloud-starter-bootstrap")
+
+	//Security
+	implementation("org.springframework.boot:spring-boot-starter-security")
+
+	//Eureka Server
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-server")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
 }
 
 dependencyManagement {
