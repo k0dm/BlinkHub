@@ -18,6 +18,10 @@ repositories {
 	mavenCentral()
 }
 
+tasks.getByName<Jar>("jar") {
+	enabled = false
+}
+
 extra["springCloudVersion"] = "2023.0.1"
 
 dependencies {
