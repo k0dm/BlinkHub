@@ -11,6 +11,7 @@ import org.modelmapper.convention.MatchingStrategies
 import org.springframework.core.env.Environment
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -36,10 +37,18 @@ class UserController(
     }
 
     @GetMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or principal == #userId")
     fun getUser(@PathVariable("userId") userId: String): ResponseEntity<UserResponseModel> {
         val userDto = service.getUserByUserId(userId)
         val responseModel = mapper.map(userDto, UserResponseModel::class.java)
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseModel)
+        return ResponseEntity.ok(responseModel)
+    }
+
+    @DeleteMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or principal == #userId")
+    fun deleteUser(@PathVariable("userId") userId: String): ResponseEntity<String> {
+        //service.deleteUserById(userId)
+        return ResponseEntity.ok("User successfully deleted with id: $userId")
     }
 
     @GetMapping("/status")
