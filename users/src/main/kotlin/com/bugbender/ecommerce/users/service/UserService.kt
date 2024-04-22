@@ -9,6 +9,7 @@ import io.github.resilience4j.retry.annotation.Retry
 import org.modelmapper.ModelMapper
 import org.modelmapper.convention.MatchingStrategies
 import org.slf4j.LoggerFactory
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -77,6 +78,12 @@ interface UserService : UserDetailsService {
 
         override fun loadUserByUsername(username: String): UserDetails {
             val userEntity = repository.findByEmail(username) ?: throw UsernameNotFoundException(username)
+            val authorities = mutableSetOf<SimpleGrantedAuthority>()
+            val roles = userEntity.roles.map { role ->
+                authorities.addAll(role.authorities.map { authority -> SimpleGrantedAuthority(authority.name) })
+                SimpleGrantedAuthority(role.name)
+            }
+            authorities.addAll(roles)
             val enable = true //todo make functionality for email verification
             return User(
                 userEntity.email,
@@ -85,7 +92,7 @@ interface UserService : UserDetailsService {
                 true,
                 true,
                 true,
-                emptyList()
+                authorities
             )
         }
     }
