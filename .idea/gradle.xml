@@ -44,14 +44,6 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/jwt-authorities" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/jwt-authorities" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/users" />
         <option name="modules">
           <set>
