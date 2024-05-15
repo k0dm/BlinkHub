@@ -38,6 +38,9 @@ class AuthenticationFilter(
         )
     }
 
+    /**
+     * Generate JWT token and add to the response header
+     */
     override fun successfulAuthentication(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -47,10 +50,11 @@ class AuthenticationFilter(
         val userEmail = (authResult.principal as User).username
         val userDto = userService.getUserDetailsByUsername(userEmail)
         val expirationTime = environment.getProperty("token.expiration_time")!!.toLong()
-        val authorities = authResult.authorities
         val now = Instant.now()
+        val authorities = authResult.authorities
+
         val token = Jwts.builder()
-            .claim("scope", authResult.authorities)
+            .claim("scope", authorities)
             .subject(userDto.userId)
             .expiration(Date.from(now.plusMillis(expirationTime)))
             .issuedAt(Date.from(now))

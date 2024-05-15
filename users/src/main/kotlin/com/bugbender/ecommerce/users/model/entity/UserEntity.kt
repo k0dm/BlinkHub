@@ -1,12 +1,14 @@
 package com.bugbender.ecommerce.users.model.entity
 
 import jakarta.persistence.*
+import java.io.Serializable
 
 @Entity
-@Table(name = "users")
+@Table(name = "`user`")
 data class UserEntity(
     @Id
     @GeneratedValue
+    @Column(name = "id")
     var id: Long = 0L,
     @Column(name = "first_name", length = 50, nullable = false)
     var firstName: String = "",
@@ -21,9 +23,9 @@ data class UserEntity(
 
     @ManyToMany(cascade = [CascadeType.PERSIST], fetch = FetchType.EAGER)
     @JoinTable(
-        name = "users_roles",
+        name = "user_role",
         joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
-        inverseJoinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")]
+        inverseJoinColumns = [JoinColumn(name = "role_id", referencedColumnName = "role_id")]
     )
     var roles: List<RoleEntity> = listOf()
-)
+): Serializable

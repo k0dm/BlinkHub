@@ -9,6 +9,7 @@ import jakarta.validation.Valid
 import org.modelmapper.ModelMapper
 import org.modelmapper.convention.MatchingStrategies
 import org.springframework.core.env.Environment
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -38,8 +39,14 @@ class UserController(
 
     @GetMapping("/{userId}")
     @PreAuthorize("hasRole('ADMIN') or principal == #userId")
-    fun getUser(@PathVariable("userId") userId: String): ResponseEntity<UserResponseModel> {
-        val userDto = service.getUserByUserId(userId)
+    fun getUser(
+        @PathVariable("userId")
+        userId: String,
+        @RequestHeader(HttpHeaders.AUTHORIZATION)
+        authorization: String
+    ): ResponseEntity<UserResponseModel> {
+
+        val userDto = service.getUserByUserId(userId, authorization)
         val responseModel = mapper.map(userDto, UserResponseModel::class.java)
         return ResponseEntity.ok(responseModel)
     }
