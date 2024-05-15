@@ -41,8 +41,8 @@ class AuthorizationFilter(
         val authorities = extractAuthorities(jwt)
 
         if (!userId.isNullOrBlank()) {
-            //userId is principal
-            UsernamePasswordAuthenticationToken(userId, null, authorities)
+            val principal = userId
+            UsernamePasswordAuthenticationToken(principal, null, authorities)
         } else
             null
     } catch (e: Exception) {
@@ -51,16 +51,16 @@ class AuthorizationFilter(
 
     private fun extractSubject(token: String): String? = getAllClaims(token).subject
 
-    private fun extractAuthorities(token: String): List<SimpleGrantedAuthority> {
-        val claims = getAllClaims(token)
-        val scope = claims.get("scope", List::class.java) as List<Map<String, String>>
-        return scope.map { SimpleGrantedAuthority(it["authority"]) }
-    }
-
     private fun getAllClaims(token: String): Claims {
         return Jwts.parser()
             .verifyWith(secretKey)
             .build()
             .parseSignedClaims(token).payload
+    }
+
+    private fun extractAuthorities(token: String): List<SimpleGrantedAuthority> {
+        val claims = getAllClaims(token)
+        val scope = claims.get("scope", List::class.java) as List<Map<String, String>>
+        return scope.map { SimpleGrantedAuthority(it["authority"]) }
     }
 }

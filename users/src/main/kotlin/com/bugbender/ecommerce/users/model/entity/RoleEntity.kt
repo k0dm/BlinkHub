@@ -4,12 +4,13 @@ import jakarta.persistence.*
 import java.io.Serializable
 
 @Entity
-@Table(name = "roles")
+@Table(name = "role")
 data class RoleEntity(
     @Id
     @GeneratedValue
-    var id: Long = 0L,
-    @Column(name = "name", length = 10)
+    @Column(name = "role_id")
+    var roleId: Long = 0L,
+    @Column(name = "name", length = 20)
     var name: String = "",
 
     @ManyToMany(mappedBy = "roles")
@@ -17,9 +18,9 @@ data class RoleEntity(
 
     @ManyToMany(cascade = [CascadeType.PERSIST], fetch = FetchType.EAGER)
     @JoinTable(
-        name = "roles_authorities",
-        joinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")],
-        inverseJoinColumns = [JoinColumn(name = "authority_id", referencedColumnName = "id")]
+        name = "role_authority",
+        joinColumns = [JoinColumn(name = "role_id", referencedColumnName = "role_id")],
+        inverseJoinColumns = [JoinColumn(name = "authority_id", referencedColumnName = "authority_id")]
     )
     var authorities: List<AuthorityEntity> = listOf()
 ) : Serializable

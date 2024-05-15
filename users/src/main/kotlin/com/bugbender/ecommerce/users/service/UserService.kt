@@ -23,9 +23,9 @@ interface UserService : UserDetailsService {
 
     fun getUserDetailsByUsername(email: String): UserDto
 
-    fun getUserByUserId(userId: String): UserDto
+    fun getUserByUserId(userId: String, authorization: String): UserDto
 
-    fun getUserByUserIdFallback(userId: String, e: Exception): UserDto
+    fun getUserByUserIdFallback(userId: String, authorization: String, e: Exception): UserDto
 
     @Service
     class Base(
@@ -55,12 +55,12 @@ interface UserService : UserDetailsService {
 
         @Retry(name = "catalog-service")
         @CircuitBreaker(name = "catalog-service", fallbackMethod = "getUserByUserIdFallback")
-        override fun getUserByUserId(userId: String): UserDto {
+        override fun getUserByUserId(userId: String, authorization: String): UserDto {
             val userEntity =
                 repository.findByUserId(userId) ?: throw UsernameNotFoundException("No user with such id: $userId")
 
             logger.debug("Before calling getProducts")
-            val productListResponse = catalogServiceClient.getProducts(userId)
+            val productListResponse = catalogServiceClient.getProducts(userId, authorization)
             logger.debug("After calling getProducts")
 
             val userDto = modelMapper.map(userEntity, UserDto::class.java)
@@ -68,7 +68,7 @@ interface UserService : UserDetailsService {
             return userDto
         }
 
-        override fun getUserByUserIdFallback(userId: String, e: Exception): UserDto {
+        override fun getUserByUserIdFallback(userId: String, authorization: String, e: Exception): UserDto {
             logger.error(e.message)
             val userEntity =
                 repository.findByUserId(userId) ?: throw UsernameNotFoundException("No user with such id: $userId")
@@ -76,6 +76,9 @@ interface UserService : UserDetailsService {
             return modelMapper.map(userEntity, UserDto::class.java)
         }
 
+        /**
+         * This method invokes when user attempts Authentication. Called in AuthenticationFilter#attemptAuthentication/
+         */
         override fun loadUserByUsername(username: String): UserDetails {
             val userEntity = repository.findByEmail(username) ?: throw UsernameNotFoundException(username)
             val authorities = mutableSetOf<SimpleGrantedAuthority>()
