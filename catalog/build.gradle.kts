@@ -43,8 +43,8 @@ dependencies {
 	testImplementation("io.github.openfeign:feign-micrometer:13.2.1")
 
 	//postgres and data jpa and model mapper
-//	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-//	runtimeOnly("org.postgresql:postgresql")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	runtimeOnly("org.postgresql:postgresql")
 	implementation("org.modelmapper:modelmapper:3.2.0")
 	
 	//actuator

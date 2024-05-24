@@ -21,7 +21,7 @@ data class UserEntity(
     @Column(name = "encrypted_password", nullable = false, unique = true)
     var encryptedPassword: String = "",
 
-    @ManyToMany(cascade = [CascadeType.PERSIST], fetch = FetchType.EAGER)
+    @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     @JoinTable(
         name = "user_role",
         joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],

@@ -13,18 +13,18 @@ interface CatalogService {
         override fun userProducts(id: String): List<ProductEntity> {
 
             return listOf(
-                ProductEntity(
-                    productId = "1",
-                    userId = id,
-                    name = "Product 1",
-                    description = "Description for product 1"
-                ),
-                ProductEntity(
-                    productId = "2",
-                    userId = id,
-                    name = "Product 2",
-                    description = "Description for product 2"
-                )
+//                ProductEntity(
+//                    productId = "1",
+//                    userId = id,
+//                    name = "Product 1",
+//                    description = "Description for product 1"
+//                ),
+//                ProductEntity(
+//                    productId = "2",
+//                    userId = id,
+//                    name = "Product 2",
+//                    description = "Description for product 2"
+//                )
             )
         }
     }
